@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Code') {
+            steps {
+                git branch: 'master', url: 'https://github.com/devops0014/static-cycle-website-jenkins-docker-.git'
+            }
+        }
+        
+        stage('Build Image') {
+            steps {
+                script {
+                    sh 'docker build -t myapp .'
+                }
+            }
+        }
+        
+        stage('Run Container') {
+            steps {
+                script {
+                    sh 'docker run -d --name cont13 -p 0279:80 myapp'
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'Pipeline completed - cleaning up workspace'
+            cleanWs()
+        }
+    }
+}
